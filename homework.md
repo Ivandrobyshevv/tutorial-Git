@@ -1,5 +1,5 @@
 # Основные команды GIT
-![GIT](PNG/trabajar-ramas-git.png)
+![GIT](trabajar-ramas-git.png)
 
 ## **Инициализации локального репозитория**
 
@@ -9,7 +9,7 @@
 
 После ввода комнады появляеться список подсказок:
 
-![prompt](PNG/prompt.png)
+![prompt](prompt.png)
 
 
 Данная команды создает репозиторий в вашей папке для дальнейшего управления версиями ваших проектов
@@ -22,7 +22,7 @@
 
 После ввода команды в терминале появятся состояние вашего репозитория:
 
-![status](PNG/terminal_status.png)
+![status](terminal_status.png)
 
 ## **Добавление файла или файлов к следующему коммиту**
 
@@ -42,7 +42,7 @@
 
  После ввода данной команды в терминале появиться сообщение что данный коммит создан:
 
-![terminal_commit](PNG/terminal_commit.png)
+![terminal_commit](terminal_commit.png)
 
 ## **Сравнения**
 
@@ -58,7 +58,7 @@
 
  У вас должен получиться вот такой результат:
 
-![terminal_commit](PNG/terminal_log.png)
+![terminal_commit](terminal_log.png)
 
 Для вывода сокращенного спика коммитов введите в терминале команду:
 
@@ -66,7 +66,7 @@
 
 У вас должен получиться вот такой результат:
 
-![log --oneline](PNG/terminal_log_oneline.png)
+![log --oneline](terminal_log_oneline.png)
 
 ## **Переход по коммитам**
 Для переключения между коммитам используйте команду:
@@ -89,7 +89,7 @@
 
 *Принцип работы веток*
 
-![branches](PNG/branches.webp)
+![branches](branches.webp)
 
 ### Создание новой ветки
 
@@ -105,7 +105,7 @@
 
 У вас должен получиться вот такой результат:
 
-![git_branch](PNG/terminal_git_branch.png)
+![git_branch](terminal_git_branch.png)
 
 ### Переход по веткам
 Для переключения между ветками используйте команду:
@@ -144,4 +144,4 @@
 
 У вас должно получиться что такое:
 
-![graph](PNG/graph.png)
+![graph](graph.png)
