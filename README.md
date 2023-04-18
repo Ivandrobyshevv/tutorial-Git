@@ -11,6 +11,7 @@
 Переименовать файл, дав ему новое имя (Друзья человека).
 
 **Решение**
+
 ```
 user@docker-server1:~/GB$ cat > home_amimals
 dogs, cats, hamsters
@@ -34,6 +35,7 @@ Horses, camels and donkeys
 Создать директорию, переместить файл туда.
 
 **Решение**
+
 ```
 user@docker-server1:~$ mkdir dir_file
 user@docker-server1:~$ ls
@@ -54,6 +56,7 @@ file_1
 из этого репозитория
 
 **Решение**
+
 ```
 user@docker-server1:~$ sudo apt-get update
 user@docker-server1:~$ sudo apt-get install mysql-server
@@ -92,9 +95,94 @@ No VM guests are running outdated hypervisor (qemu) binaries on this host.
 
 Установить и удалить deb-пакет с помощью dpkg.
 
-
 **Решение**
 
 ```
 
 ```
+
+**Задание 5**
+
+Выложить историю команд в терминале ubuntu.
+
+**Задание 6**
+
+Нарисовать диаграмму, в которой есть класс родительский класс, домашние животные и вьючные животные, в составы которых в
+случае домашних животных войдут классы: собаки, кошки, хомяки, а в класс вьючные животные войдут: Лошади, верблюды и
+ослы).
+
+**Решение**
+
+![class_Animals](./images/class_Animals.png)
+
+**Задание 7**
+
+В подключенном MySQL репозитории создать базу данных “Друзья человека”
+
+**Решение**
+
+```sql
+CREATE
+DATABASE human_friends;
+```
+
+**Задание 8**
+
+Создать таблицы с иерархией из диаграммы в БД
+
+**Решение**
+
+```sql
+USE
+Human_friends;
+CREATE TABLE animal_classes
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    class_name VARCHAR(20)
+);
+
+INSERT INTO animal_classes (class_name)
+VALUES ('вьючные'),
+       ('домашние');
+
+
+CREATE TABLE packed_animals
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    genus_name VARCHAR(20),
+    class_id   INT,
+    FOREIGN KEY (class_id) REFERENCES animal_classes (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+INSERT INTO packed_animals (genus_name, class_id)
+VALUES ('Лошади', 1),
+       ('Ослы', 1),
+       ('Верблюды', 1);
+
+CREATE TABLE home_animals
+(
+    Id         INT AUTO_INCREMENT PRIMARY KEY,
+    genus_name VARCHAR(20),
+    class_id   INT,
+    FOREIGN KEY (class_id) REFERENCES animal_classes (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+INSERT INTO home_animals (genus_name, class_id)
+VALUES ('Кошки', 2),
+       ('Собаки', 2),
+       ('Хомяки', 2);
+
+CREATE TABLE cats
+(
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(20),
+    birthday DATE,
+    commands VARCHAR(50),
+    genus_id int,
+    Foreign KEY (genus_id) REFERENCES home_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+```
+
+
+
+
