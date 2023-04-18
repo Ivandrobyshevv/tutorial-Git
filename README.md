@@ -134,7 +134,7 @@ DATABASE human_friends;
 
 ```sql
 USE
-Human_friends;
+human_friends;
 CREATE TABLE animal_classes
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
@@ -183,6 +183,263 @@ CREATE TABLE cats
 );
 ```
 
+**Задание 9**
+
+Заполнить низкоуровневые таблицы именами(животных), командами которые они выполняют и датами рождения.
+
+**Решение**
+
+```sql
+INSERT INTO cats (name, birthday, commands, genus_id)
+VALUES ('Пупа', '2011-01-01', 'кс-кс-кс', 1),
+       ('Олег', '2016-01-01', 'отставить!', 1),
+       ('Тьма', '2017-01-01', '', 1);
+
+CREATE TABLE dogs
+(
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(20),
+    birthday DATE,
+    commands VARCHAR(50),
+    genus_id int,
+    Foreign KEY (genus_id) REFERENCES home_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+INSERT INTO dogs (name, birthday, commands, genus_id)
+VALUES ('Дик', '2020-01-01', 'ко мне, лежать, лапу, голос', 2),
+       ('Граф', '2021-06-12', 'сидеть, лежать, лапу', 2),
+       ('Шарик', '2018-05-01', 'сидеть, лежать, лапу, след, фас', 2),
+       ('Босс', '2021-05-10', 'сидеть, лежать, фу, место', 2);
+
+CREATE TABLE hamsters
+(
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(20),
+    birthday DATE,
+    commands VARCHAR(50),
+    genus_id int,
+    Foreign KEY (genus_id) REFERENCES home_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+INSERT INTO hamsters (name, birthday, commands, genus_id)
+VALUES ('Малой', '2020-10-12', '', 3),
+       ('Медведь', '2021-03-12', 'атака сверху', 3),
+       ('Ниндзя', '2022-07-11', NULL, 3),
+       ('Бурый', '2022-05-10', NULL, 3);
+
+CREATE TABLE horses
+(
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(20),
+    birthday DATE,
+    commands VARCHAR(50),
+    genus_id int,
+    Foreign KEY (genus_id) REFERENCES packed_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+INSERT INTO horses (name, birthday, commands, genus_id)
+VALUES ('Гром', '2020-01-12', 'бегом, шагом', 1),
+       ('Закат', '2017-03-12', 'бегом, шагом, хоп', 1),
+       ('Байкал', '2016-07-12', 'бегом, шагом, хоп, брр', 1),
+       ('Молния', '2020-11-10', 'бегом, шагом, хоп', 1);
+
+CREATE TABLE donkeys
+(
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(20),
+    birthday DATE,
+    commands VARCHAR(50),
+    genus_id int,
+    Foreign KEY (genus_id) REFERENCES packed_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+INSERT INTO donkeys (name, birthday, commands, genus_id)
+VALUES ('Первый', '2019-04-10', NULL, 2),
+       ('Второй', '2020-03-12', '', 2),
+       ('Третий', '2021-07-12', '', 2),
+       ('Четвертый', '2022-12-10', NULL, 2);
+
+CREATE TABLE camels
+(
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(20),
+    birthday DATE,
+    commands VARCHAR(50),
+    genus_id int,
+    Foreign KEY (genus_id) REFERENCES packed_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+INSERT INTO camels (name, birthday, commands, genus_id)
+VALUES ('Горбатый', '2022-04-10', 'вернись', 3),
+       ('Самец', '2019-03-12', 'остановись', 3),
+       ('Сифон', '2015-07-12', 'повернись', 3),
+       ('Борода', '2022-12-10', 'улыбнись', 3);
+```
+
+**Задание 10**
+
+Удалив из таблицы верблюдов, т.к. верблюдов решили перевезти в другой питомник на зимовку. Объединить таблицы лошади, и
+ослы в одну таблиц.
+
+**Решение**
+
+```sql
+SET
+SQL_SAFE_UPDATES = 0;
+DELETE
+FROM camels;
+
+SELECT name, birthday, commands
+FROM horses
+UNION
+SELECT name, birthday, commands
+FROM donkeys;
+```
+
+**Задание 11**
+
+Создать новую таблицу “молодые животные” в которую попадут все животные старше 1 года, но младше 3 лет и в отдельном
+столбце с точностью до месяца подсчитать возраст животных в новой таблице
+
+**Решение**
+
+```sql
+CREATE
+TEMPORARY TABLE animals AS
+SELECT *, 'Лошади' as genus
+FROM horses
+UNION
+SELECT *, 'Ослы' AS genus
+FROM donkeys
+UNION
+SELECT *, 'Собаки' AS genus
+FROM dogs
+UNION
+SELECT *, 'Кошки' AS genus
+FROM cats
+UNION
+SELECT *, 'Хомяки' AS genus
+FROM hamsters;
+
+CREATE TABLE yang_animal AS
+SELECT name, birthday, commands, genus, TIMESTAMPDIFF(MONTH, birthday, CURDATE()) AS age_in_month
+FROM animals
+WHERE birthday BETWEEN ADDDATE(curdate(), INTERVAL -3 YEAR) AND ADDDATE(CURDATE(), INTERVAL -1 YEAR);
+
+SELECT *
+FROM yang_animal;
+```
+
+**Задание 12**
+
+Объединить все таблицы в одну, при этом сохраняя поля, указывающие на прошлую принадлежность к старым таблицам.
+
+**Решение**
+
+```sql
+SELECT h.name, h.birthday, h.commands, pa.genus_name, ya.age_in_month
+FROM horses h
+         LEFT JOIN yang_animal ya ON ya.name = h.name
+         LEFT JOIN packed_animals pa ON pa.id = h.genus_id
+UNION
+SELECT d.name, d.birthday, d.commands, pa.genus_name, ya.age_in_month
+FROM donkeys d
+         LEFT JOIN yang_animal ya ON ya.name = d.name
+         LEFT JOIN packed_animals pa ON pa.id = d.genus_id
+UNION
+SELECT c.name, c.birthday, c.commands, ha.genus_name, ya.age_in_month
+FROM cats c
+         LEFT JOIN yang_animal ya ON ya.name = c.name
+         LEFT JOIN home_animals ha ON ha.id = c.genus_id
+UNION
+SELECT d.name, d.birthday, d.commands, ha.genus_name, ya.age_in_month
+FROM dogs d
+         LEFT JOIN yang_animal ya ON ya.name = d.name
+         LEFT JOIN home_animals ha ON ha.id = d.genus_id
+UNION
+SELECT hm.name, hm.nirthday, hm.commands, ha.genus_name, ya.age_in_month
+FROM hamsters hm
+         LEFT JOIN yang_animal ya ON ya.name = hm.name
+         LEFT JOIN home_animals ha ON ha.id = hm.genus_id;
+```
+
+**Задание 13**
+Создать класс с Инкапсуляцией методов и наследованием по диаграмме
+
+```python
+# src/model/animal_base.py
+import datetime
 
 
+class Animal:
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        self.name = name
+        self.age = age
+        self.commands = commands
+
+
+class HomeAnimal(Animal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+
+class PackedAnimal(Animal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+```
+
+```python
+# src/model/home_animal.py
+import datetime
+
+from src.model.animal_base import HomeAnimal
+
+
+class Dog(HomeAnimal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+
+class Cat(HomeAnimal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+
+class Hamster(HomeAnimal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+```
+
+```python
+# src/model/packed_animal.py
+import datetime
+
+from src.model.animal_base import PackedAnimal
+
+
+class Horse(PackedAnimal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+
+class Camel(PackedAnimal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+
+class Donkey(PackedAnimal):
+    def __init__(self, name: str, age: datetime, commands: str) -> None:
+        super().__init__(name, age, commands)
+
+```
+
+**Задание 14**
+
+Написать программу, имитирующую работу реестра домашних животных. В программе должен быть реализован следующий
+функционал:
+
+* Завести новое животное
+* Определять животное в правильный класс
+* Увидеть список команд, которое выполняет животное
+* Обучить животное новым командам
+* Реализовать навигацию по меню
+
+**Решение**
 
