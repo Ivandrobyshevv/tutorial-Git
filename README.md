@@ -15,11 +15,9 @@
 ```
 user@docker-server1:~/GB$ cat > home_amimals
 dogs, cats, hamsters
-^C
 
 user@docker-server1:~/GB$ cat > pack_animals
 Horses, camels and donkeys
-^C
 
 user@docker-server1:~/GB$ ls
 home_amimals  pack_animals
@@ -109,13 +107,13 @@ sudo dpkg -r docker-ce-cli
 
 **Решение**
 
-[Задача 1](#Задание 1)
+[Задача 1](#Задание-1)
 
-[Задача 2](#Задание 2)
+[Задача 2](#Задание-2)
 
-[Задача 3](#Задание 3)
+[Задача 3](#Задание-3)
 
-[Задача 4](#Задание 4)
+[Задача 4](#Задание-4)
 
 **Задание 6**
 
