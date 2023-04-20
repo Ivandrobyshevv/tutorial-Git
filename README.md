@@ -2,7 +2,7 @@
 
 ## Задание
 
-**Задание 1**
+### Задание 1
 
 Используя команду cat в терминале операционной системы Linux, создать
 два файла Домашние животные (заполнив файл собаками, кошками,
@@ -30,7 +30,7 @@ dogs, cats, hamsters
 Horses, camels and donkeys
 ```
 
-**Задание 2**
+### Задание 2
 
 Создать директорию, переместить файл туда.
 
@@ -50,7 +50,7 @@ file_1
 
 ```
 
-**Задание 3**
+### Задание 3
 
 Подключить дополнительный репозиторий MySQL. Установить любой пакет
 из этого репозитория
@@ -91,19 +91,31 @@ No user sessions are running outdated binaries.
 No VM guests are running outdated hypervisor (qemu) binaries on this host.
 ```
 
-**Задание 4**
+### Задание 4
 
 Установить и удалить deb-пакет с помощью dpkg.
 
 **Решение**
 
-```
-
-```
+````
+sudo wget https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/docker-ce-cli_20.10.13~3-0~ubuntu-jammy_amd64.deb
+sudo dpkg -i docker-ce-cli_20.10.133-0ubuntu-jammy_amd64.deb
+sudo dpkg -r docker-ce-cli
+````
 
 **Задание 5**
 
 Выложить историю команд в терминале ubuntu.
+
+**Решение**
+
+[Задача 1](#Задание 1)
+
+[Задача 2](#Задание 2)
+
+[Задача 3](#Задание 3)
+
+[Задача 4](#Задание 4)
 
 **Задание 6**
 
